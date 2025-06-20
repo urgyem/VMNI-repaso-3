@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consenso VMNI y TAFCN - Presentación interactiva</title>
+    <style>
+        /* Variables de color */
+        :root {
+            --primary-red: #be1520;
+            --primary-blue: #074d73;
+            --white: #ffffff;
+            --black: #000000;
+            --yellow: #ffc107; /* Amarillo para secundario y recomendación */
+
+            /* Colores de las recomendaciones */
+            --recommendation-green: #4CAF50;
+            --recommendation-yellow: #FFC107;
+            --recommendation-red: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--primary-blue); /* Fondo principal */
+            color: var(--black);
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 30px;
+            padding: 30px;
+            background-color: var(--primary-red); /* Cabecera con color primario */
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .societies {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            color: var(--black);
+        }
+
+        .societies h3 {
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .nav-btn {
+            background-color: var(--primary-blue); /* Botones de navegación */
+            color: var(--white);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            background-color: var(--primary-red); /* Hover color primario */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+
+        .nav-btn.active {
+            background-color: var(--primary-red); /* Botón activo */
+            color: var(--white);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+        }
+
+        .section {
+            display: none;
+            background-color: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section h2 {
+            color: var(--primary-blue);
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--primary-red); /* Línea bajo título */
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: var(--primary-red);
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        .recommendation-card {
+            color: var(--black);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .recommendation-green {
+            background-color: var(--recommendation-green);
+            color: var(--white);
+        }
+
+        .recommendation-yellow {
+            background-color: var(--recommendation-yellow);
+            color: var(--black);
+        }
+
+        .recommendation-red {
+            background-color: var(--recommendation-red);
+            color: var(--white);
+        }
+
+        .lung-symbol {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+            border: 2px solid var(--white); /* Borde para el contraste del símbolo */
+        }
+
+        .green { background-color: var(--recommendation-green); }
+        .yellow { background-color: var(--recommendation-yellow); }
+        .red { background-color: var(--recommendation-red); }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .patient-group {
+            background-color: #e0f2f7; /* Un azul muy claro */
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid var(--primary-blue);
+        }
+
+        .patient-group h4 {
+            color: var(--primary-blue);
+        }
+
+        .highlight {
+            background-color: #fff9e6; /* Amarillo muy claro */
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid var(--yellow);
+        }
+
+        .accordion {
+            background-color: #f2f2f2; /* Gris claro para acordeón */
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background-color: var(--primary-red);
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 20px;
+            background-color: var(--white);
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .accordion-content.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-red); /* Barra de progreso roja */
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background-color: var(--primary-blue); /* Cards de estadísticas */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: var(--white);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .flowchart-box {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 300px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: var(--primary-red); /* Flechas en rojo */
+            font-weight: bold;
+        }
+        
+        a {
+            color: var(--primary-blue); /* Enlaces en azul primario */
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 200px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <header class="header">
+            <h1>Consenso de Sociedades Científicas Españolas</h1>
+            <h2>Ventilación no invasiva y terapia de alto flujo</h2>
+            <p>En el paciente adulto, pediátrico y neonatal con insuficiencia respiratoria aguda grave</p>
+            <p>Documento de estudio 3</p>
+
+            
+            <div class="societies">
+                <h3>Sociedades participantes</h3>
+                <p><strong>SEPAR • SEMICYUC • SEMES • SECIP • SENeO • SEDAR • SENP</strong></p>
+                <p>26 profesionales expertos • 71 recomendaciones consensuadas</p>
+            </div>
+        </header>
+
+        <nav class="navigation">
+            <button class="nav-btn active" onclick="showSection('overview')">Resumen general</button>
+            <button class="nav-btn" onclick="showSection('adult-indications')">Indicaciones adultos</button>
+            <button class="nav-btn" onclick="showSection('procedures')">Procedimientos</button>
+            <button class="nav-btn" onclick="showSection('monitoring')">Monitorización</button>
+            <button class="nav-btn" onclick="showSection('conclusions')">Conclusiones</button>
+        </nav>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 20%"></div>
+        </div>
+
+        <section id="overview" class="section active">
+            <h2>Resumen general del consenso</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">2</div>
+                    <div>Modalidades SRNI</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <div>Sociedades científicas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">26</div>
+                    <div>Expertos participantes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">71</div>
+                    <div>Recomendaciones</div>
+                </div>
+            </div>
+
+            <h3>¿Qué es el soporte respiratorio no invasivo (SRNI)?</h3>
+            <div class="highlight">
+                <p><strong>SRNI comprende dos modalidades de tratamiento:</strong></p>
+                <ul>
+                    <li><strong>VMNI:</strong> Ventilación Mecánica No Invasiva</li>
+                    <li><strong>TAFCN:</strong> Terapia de Alto Flujo con Cánulas Nasales</li>
+                </ul>
+            </div>
+
+            <h3>Niveles de evidencia</h3>
+            <div class="recommendation-card recommendation-green">
+                <span class="lung-symbol green"></span>
+                <strong>DEBERÍA HACERSE:</strong> evidencia científica sólida de beneficio y efectividad
+            </div>
+            <div class="recommendation-card recommendation-yellow">
+                <span class="lung-symbol yellow"></span>
+                <strong>PUEDE HACERSE:</strong> acuerdo general y/o evidencia científica favorable
+            </div>
+            <div class="recommendation-card recommendation-red">
+                <span class="lung-symbol red"></span>
+                <strong>NO HACER:</strong> evidencia científica de daño potencial o mala praxis
+            </div>
+
+            <h3>Poblaciones objetivo</h3>
+            <div class="patient-group">
+                <h4>🏥 Pacientes adultos</h4>
+                <p>Con insuficiencia respiratoria aguda en diversas patologías</p>
+            </div>
+            <div class="patient-group">
+                <h4>👶 Pacientes pediátricos</h4>
+                <p>Desde lactantes hasta adolescentes con IRA</p>
+            </div>
+            <div class="patient-group">
+                <h4>🍼 Pacientes neonatales</h4>
+                <p>Recién nacidos a término y prematuros</p>
+            </div>
+        </section>
+
+        <section id="adult-indications" class="section">
+            <h2>Indicaciones VMNI en pacientes adultos</h2>
+
+            <h3>Indicaciones con evidencia sólida (100% consenso):</h3>
+            <div class="recommendation-card recommendation-green">
+                <span class="lung-symbol green"></span>
+                <strong>EPOC con acidosis respiratoria:</strong> pH < 7,35 y PaCO2 > 45 mmHg
+            </div>
+            <div class="recommendation-card recommendation-green">
+                <span class="lung-symbol green"></span>
+                <strong>Edema Agudo de Pulmón Cardiogénico:</strong> CPAP o VMNI con presión de soporte
+            </div>
+
+            <h3>Indicaciones importantes (>90% consenso)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Contexto clínico</th>
+                            <th>Recomendación</th>
+                            <th>% Consenso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Agudización grave de asma</td>
+                            <td><span class="lung-symbol yellow"></span>Puede hacerse</td>
+                            <td>93%</td>
+                        </tr>
+                        <tr>
+                            <td>Neumonía + comorbilidad cardiorrespiratoria</td>
+                            <td><span class="lung-symbol green"></span>Debería hacerse</td>
+                            <td>93%</td>
+                        </tr>
+                        <tr>
+                            <td>Distrés respiratorio moderado-grave</td>
+                            <td><span class="lung-symbol red"></span>No hacer</td>
+                            <td>86%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>VMNI en contextos específicos</h3>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Weaning de ventilación mecánica</span>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Postextubación en pacientes de riesgo:</strong></p>
+                    <ul>
+                        <li>Especialmente enfermos con EPOC</li>
+                        <li>Reduce tasa de reintubaciones</li>
+                        <li>Mejor si se combina con TAFCN</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Pandemias</span>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Uso en pacientes cuidadosamente seleccionados:</strong></p>
+                    <ul>
+                        <li>En centros con experiencia</li>
+                        <li>Ambiente protegido con presión negativa</li>
+                        <li>Recomendaciones específicas para SARS-CoV-2</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>¿Cuándo usar TAFCN en adultos</h3>
+            <div class="recommendation-card recommendation-green">
+                <span class="lung-symbol green"></span>
+                <strong>Primera línea en neumonía/SDRA:</strong> frente a oxigenoterapia convencional y VMNI (60% consenso)
+            </div>
+            <div class="recommendation-card recommendation-green">
+                <span class="lung-symbol green"></span>
+                <strong>Inmunodeprimidos:</strong> frente a VMNI en IRA (66% consenso)
+            </div>
+        </section>
+
+        <section id="procedures" class="section">
+            <h2>Procedimientos y configuración</h2>
+
+            <h3>Estratificación de pacientes</h3>
+            <div class="highlight">
+                <p><strong>Objetivo:</strong> identificar pacientes de alto riesgo que requieren mayor dedicación y medios</p>
+                <p><strong>Criterio:</strong> valoración por especialista en entorno con monitorización adecuada</p>
+            </div>
+
+            <h3>Dotación de personal (93% consenso)</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">1:6</div>
+                    <div>Ratio Médico-Paciente</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1:4</div>
+                    <div>Ratio Enfermera-Paciente</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24h</div>
+                    <div>Monitorización Continua</div>
+                </div>
+            </div>
+
+            <h3>Selección de ventiladores</h3>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Adultos (80% consenso)</span>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <ul>
+                        <li><strong>Preferencia:</strong> ventiladores específicos para VMNI</li>
+                        <li><strong>Alternativa:</strong> ventiladores de cuidados críticos con módulo VMNI</li>
+                        <li><strong>Criterio:</strong> fácil manejo por personal con rotación</li>
+                    </ul>
+                </div>
+            </div>
+           
+            <h3>Selección de interfases</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Población</th>
+                            <th>Interfase Recomendada</th>
+                            <th>Consenso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Adultos</td>
+                            <td>Máscaras oronasales o faciales totales</td>
+                            <td>87%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Configuración de parámetros VMNI</h3>
+            <div class="patient-group">
+                <h4>Adultos</h4>
+                <ul>
+                    <li><strong>Modo:</strong> Presión de soporte (PS) - 93% consenso</li>
+                    <li><strong>Volumen objetivo:</strong> >300ml o 5ml/kg peso ideal</li>
+                    <li><strong>Frecuencia respiratoria:</strong> <25 rpm</li>
+                </ul>
+            </div>
+
+            <h3>Configuración TAFCN</h3>
+            <div class="recommendation-card recommendation-green">
+                <h4>Adultos (100% consenso)</h4>
+                <ul>
+                    <li><strong>Flujo:</strong> 40-50 L/min</li>
+                    <li><strong>FiO2:</strong> mínima para SpO2 93-94%</li>
+                    <li><strong>Temperatura:</strong> ~37°C</li>
+                    <li><strong>Índice ROX:</strong> ≥4,88 predice éxito</li>
+                </ul>
+            </div>
+
+            <h3>Humidificación</h3>
+            <div class="highlight">
+                <p><strong>VMNI:</strong> humidificación activa recomendada (53% adultos, 94% pediátricos, 100% neonatales)</p>
+                <p><strong>Criterio:</strong> sin añadir resistencia ni espacio muerto al sistema</p>
+            </div>
+        </section>
+
+        <section id="monitoring" class="section">
+            <h2>Monitorización y control</h2>
+
+            <h3>Evaluación de eficacia</h3>
+            <div class="flowchart">
+                <div class="flowchart-box">
+                    <h4>1 Hora - Evaluación inicial</h4>
+                    <p>Gasometría de eficacia (93% consenso)</p>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="flowchart-box">
+                    <h4>4-6 Horas - Punto crítico</h4>
+                    <p>Buen indicador éxito/fracaso (93% consenso)</p>
+                </div>
+                <div class="arrow">↓</div>
+                <div class="flowchart-box">
+                    <h4>Decisión terapéutica</h4>
+                    <p>Continuar, modificar o interrumpir</p>
+                </div>
+            </div>
+
+            <h3>Parámetros de monitorización continua</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">FR</div>
+                    <div>Frecuencia respiratoria</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">FC</div>
+                    <div>Frecuencia cardíaca</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">SpO2</div>
+                    <div>Saturación oxígeno</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">ECG</div>
+                    <div>Electrocardiograma</div>
+                </div>
+            </div>
+
+            <h3>Criterios de mejora por edad</h3>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Adultos</span>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <h4>Criterios clínicos:</h4>
+                    <ul>
+                        <li>Mejora de encefalopatía</li>
+                        <li>Reducción trabajo respiratorio</li>
+                        <li>Reducción frecuencia respiratoria</li>
+                        <li>Reducción escala de disnea</li>
+                    </ul>
+                    <h4>Criterios gasométricos:</h4>
+                    <ul>
+                        <li>Mejora acidosis respiratoria</li>
+                        <li>Mejora hipoxemia</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Tipos de fracaso VMNI</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Tiempo</th>
+                            <th>Causa principal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Inmediato</td>
+                            <td>&lt; 1 hora</td>
+                            <td>Mala tolerancia</td>
+                        </tr>
+                        <tr>
+                            <td>Precoz</td>
+                            <td>1-48 horas</td>
+                            <td>Más frecuente</td>
+                        </tr>
+                        <tr>
+                            <td>Tardío</td>
+                            <td>&gt; 48 horas</td>
+                            <td>Infección nosocomial</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Criterios de retirada por patología</h3>
+            <div class="patient-group">
+                <h4>EPOC (53% consenso)</h4>
+                <p><strong>Retirada directa</strong> cuando:</p>
+                <ul>
+                    <li>Normalización del pH</li>
+                    <li>Mejora PaCO2</li>
+                    <li>Mejora condición clínica general</li>
+                    <li>Tolerancia respiración espontánea</li>
+                </ul>
+            </div>
+
+            <div class="patient-group">
+                <h4>Síndrome Hipoventilación-Obesidad (73% consenso)</h4>
+                <p><strong>Evaluar continuidad</strong> post-episodio agudo:</p>
+                <ul>
+                    <li>Muchos pacientes tienen trastorno del sueño de base</li>
+                    <li>Considerar VMNI nocturna</li>
+                </ul>
+            </div>
+
+            <div class="patient-group">
+                <h4>Patología neuromuscular</h4>
+                <p><strong>Retirada progresiva:</strong></p>
+                <ul>
+                    <li>Dificultosa en muchas ocasiones</li>
+                    <li>Transición a VMNI crónica domiciliaria</li>
+                    <li>Especialmente en pediatría (97% consenso)</li>
+                </ul>
+            </div>
+
+            <h3>Ventilación domiciliaria crónica</h3>
+            <div class="highlight">
+                <h4>Criterios de evaluación (80% consenso)</h4>
+                <p><strong>Considerar en pacientes con:</strong></p>
+                <ul>
+                    <li>Enfermedad pulmonar restrictiva</li>
+                    <li>Patología neuromuscular</li>
+                    <li>EPOC con PaCO2 &gt; 56 mmHg al alta</li>
+                </ul>
+            </div>
+
+            <div class="recommendation-card recommendation-red">
+                <span class="lung-symbol red"></span>
+                <strong>Sin respuesta a VMNI (100% consenso):</strong>
+                <p>Interrupción precoz y valorar intubación endotraqueal + ventilación invasiva</p>
+                <p><em>Cualquier demora innecesaria puede aumentar mortalidad</em></p>
+            </div>
+        </section>
+
+        <section id="conclusions" class="section">
+            <h2>Conclusiones del consenso</h2>
+
+            <div class="highlight">
+                <h3>Impacto del consenso</h3>
+                <p>Primera vez que las principales sociedades científicas españolas alcanzan acuerdo sobre el uso de VMNI y TAFCN en insuficiencia respiratoria aguda</p>
+            </div>
+
+            <h3>Logros principales</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">71</div>
+                    <div>Recomendaciones consensuadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div>Grupos de edad cubiertos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <div>Sociedades científicas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div>Consenso en indicaciones clave</div>
+                </div>
+            </div>
+
+            <h3>Beneficios esperados</h3>
+            <div class="recommendation-card recommendation-green">
+                <h4>📋 Reducción de variabilidad clínica</h4>
+                <p>Herramienta de trabajo actualizada para todos los médicos</p>
+            </div>
+
+            <div class="recommendation-card recommendation-green">
+                <h4>🎯 Mejora en indicaciones</h4>
+                <p>Claridad sobre cuándo usar VMNI vs TAFCN vs soporte invasivo</p>
+            </div>
+
+            <div class="recommendation-card recommendation-green">
+                <h4>👥 Manejo estandarizado</h4>
+                <p>Criterios uniformes para adultos, pediátricos y neonatales</p>
+            </div>
+
+            <div class="recommendation-card recommendation-green">
+                <h4>📊 Mejor seguimiento</h4>
+                <p>Criterios claros de éxito, fracaso y retirada</p>
+            </div>
+
+            <h3>Consideraciones futuras</h3>
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Evolución del conocimiento</span>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <p>Las recomendaciones se modificarán con:</p>
+                    <ul>
+                        <li>Generación de nuevo conocimiento científico</li>
+                        <li>Consolidación de evidencia existente</li>
+                        <li>Desarrollo de nuevas tecnologías</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Tecnologías emergentes</span>
+                    <span>+</span>
+                </div>
+                <div class="accordion-content">
+                    <p>Papel futuro de VMNI y TAFCN frente a:</p>
+                    <ul>
+                        <li>Oxigenación extracorpórea</li>
+                        <li>Extracción extracorpórea de CO2</li>
+                        <li>Otras tecnologías de soporte respiratorio</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Enfoque sistemático</h3>
+            <div class="flowchart">
+                <div class="flowchart-box">
+                    <h4>Dinámico</h4>
+                    <p>Actualización continua con evidencia</p>
+                </div>
+                <div class="arrow">+</div>
+                <div class="flowchart-box">
+                    <h4>Holístico</h4>
+                    <p>Considera todos los aspectos del paciente</p>
+                </div>
+                <div class="arrow">+</div>
+                <div class="flowchart-box">
+                    <h4>Sistemático</h4>
+                    <p>Protocolos claros y reproducibles</p>
+                </div>
+            </div>
+
+            <div class="recommendation-card recommendation-green">
+                <h4>🏥 Objetivo final</h4>
+                <p><strong>Mejorar los desenlaces clínicos</strong> y reducir la carga de atención médica hospitalaria en el manejo de la insuficiencia respiratoria aguda</p>
+            </div>
+
+            <h3>BIBLIOGRAFÍA</h3>
+            <div class="highlight">
+                <p><strong>Documento completo disponible online</strong></p>
+                <p>
+                    DOI: 
+                    <a href="https://www-sciencedirect-com.universidadviu.idm.oclc.org/science/article/abs/pii/S0210569120303338?via%3Dihub" target="_blank">
+                        10.1016/j.medin.2020.08.016
+                    </a>
+                </p>
+                <p>Fecha de publicación: 10 de diciembre de 2020</p>
+            </div>
+
+    <script>
+        let currentSection = 0;
+        const sections = ['overview', 'adult-indications', 'procedures', 'monitoring', 'conclusions'];
+
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            sections.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.remove('active');
+                }
+            });
+            
+            // Mostrar la sección seleccionada
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Actualizar botones de navegación
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Encontrar y activar el botón correcto
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('onclick').includes(sectionId)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Actualizar barra de progreso
+            currentSection = sections.indexOf(sectionId);
+            updateProgressBar();
+            
+            // Scroll al inicio de la sección
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentSection + 1) / sections.length) * 100;
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+                progressBar.style.width = progress + '%';
+            }
+        }
+
+        function toggleAccordion(header) {
+            const content = header.nextElementSibling;
+            const symbol = header.querySelector('span:last-child');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                symbol.textContent = '+';
+            } else {
+                // Cerrar otros acordeones en la misma sección
+                const section = header.closest('.section');
+                section.querySelectorAll('.accordion-content.active').forEach(ac => {
+                    ac.classList.remove('active');
+                    ac.previousElementSibling.querySelector('span:last-child').textContent = '+';
+                });
+                
+                content.classList.add('active');
+                symbol.textContent = '−';
+            }
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' && currentSection < sections.length - 1) {
+                currentSection++;
+                showSectionByIndex(currentSection);
+            } else if (e.key === 'ArrowLeft' && currentSection > 0) {
+                currentSection--;
+                showSectionByIndex(currentSection);
+            }
+        });
+
+        function showSectionByIndex(index) {
+            const sectionId = sections[index];
+            showSection(sectionId);
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgressBar();
+            
+            // Observar elementos para animaciones
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.6s ease-out';
+                    }
+                });
+            }, observerOptions);
+
+            // Observar elementos cuando se cargan
+            document.querySelectorAll('.recommendation-card, .patient-group, .stat-card').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Mejorar experiencia móvil
+        if ('ontouchstart' in window) {
+            document.body.style.cursor = 'pointer';
+        }
+    </script>
+</body>
+</html>
